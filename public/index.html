@@ -1,0 +1,19 @@
+<body>
+    <script src="realtime-socket-card.min.js">
+    </script>
+    <script>
+        // const realtimeCardFactory = new RealTimeCardFactory("teal","white")
+        // let i = 0
+        // window.onkeydown = function(event) {
+        //     if(event.keyCode == 13) {
+        //     var msg = "Hello tick me i f you know me or just act like you want to tick me wherever you want or fk up"
+        //         if(i%2 == 0) {
+        //             msg = "Iam Awesome and you fkin deal with it."
+        //         }
+        //         realtimeCardFactory.addCard(msg)
+        //     }
+        //     i++
+        // }
+        RealTimeCardStore.init("http://localhost:8000/test","create-card","teal","white")
+    </script>
+</body>
