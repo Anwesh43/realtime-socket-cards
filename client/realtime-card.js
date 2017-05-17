@@ -1,14 +1,15 @@
-class Card {
-    constructor(y,text,color,textColor) {
+class RealTimeCard {
+    constructor(text,color,textColor) {
         this.text = text
         this.img = document.createElement('img')
-        this.img.position = 'absolute'
-        this.w = (window.innerWidth>window.innerHeight)?window.innerWidth/2:window.innerWidth
-        this.img.top = y
-        this.img.left = window.innerWidth/2-this.w/2
+        this.img.style.position = 'absolute'
+        this.w = (window.innerWidth<window.innerHeight)?window.innerWidth:window.innerWidth/2
+        this.img.style.top = 0
+        this.img.style.left = window.innerWidth/2-this.w/2
         document.body.appendChild(this.img)
         this.textColor = textColor
         this.textComponents = []
+        this.color = color
     }
     createTextComponents(canvas,context) {
         var msg = ""
@@ -16,22 +17,26 @@ class Card {
         for(let token of this.text.split(" ")) {
             const wText = context.measureText(msg+token).width
             if(wText > 4*this.w/5) {
-                this.textComponents.push(new TextComponent(msg,x,y))
+                const wMsg = context.measureText(msg).width
+                this.textComponents.push(new TextComponent(msg,this.textColor,this.w/2-wMsg/2,y))
                 msg = token
-                y += this.w/8
+                y += this.w/15
             }
             else {
-                msg += token
+                msg += " "+token
             }
         }
-        this.textComponents.push(new TextComponent(msg,x,y))
-        canvas.height = y+this.w/8
+        const wMsg = context.measureText(msg).width
+        this.textComponents.push(new TextComponent(msg,this.textColor,this.w/2-wMsg/2,y))
+        canvas.height = y+this.w/15
+        context.font = context.font.replace(/\d{2}/,`${this.w/17}`)
     }
     create() {
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d')
         canvas.width = this.w
-        context.font = context.font.replace(/\d{2}/,`${this.w/10}`)
+        context.font = context.font.replace(/\d{2}/,`${this.w/17}`)
+        console.log(context.font)
         this.createTextComponents(canvas,context)
         context.fillStyle = this.color
         context.fillRect(0,0,canvas.width,canvas.height)
@@ -49,7 +54,8 @@ class TextComponent {
         this.textColor = textColor
     }
     draw(context) {
+        console.log(this.text)
         context.fillStyle = this.textColor
-        context.fillText(text,x,y)
+        context.fillText(this.text,this.x,this.y)
     }
 }
