@@ -4,7 +4,7 @@ class RealTimeCard {
         this.img = document.createElement('img')
         this.img.style.position = 'absolute'
         this.w = (window.innerWidth<window.innerHeight)?window.innerWidth:window.innerWidth/2
-        this.img.style.top = 0
+        this.img.style.top = window.innerHeight/10
         this.img.style.left = window.innerWidth/2-this.w/2
         document.body.appendChild(this.img)
         this.textColor = textColor
@@ -30,6 +30,13 @@ class RealTimeCard {
         this.textComponents.push(new TextComponent(msg,this.textColor,this.w/2-wMsg/2,y))
         canvas.height = y+this.w/15
         context.font = context.font.replace(/\d{2}/,`${this.w/17}`)
+        this.h = canvas.height
+    }
+    getHeight() {
+        return this.h
+    }
+    updateTopPosition(gap) {
+        this.img.style.top = parseFloat(this.img.style.top)+gap
     }
     create() {
         const canvas = document.createElement('canvas')
@@ -57,5 +64,21 @@ class TextComponent {
         console.log(this.text)
         context.fillStyle = this.textColor
         context.fillText(this.text,this.x,this.y)
+    }
+}
+class RealTimeCardFactory {
+    constructor(color,textColor) {
+        this.cards = []
+        this.color = color
+        this.textColor = textColor
+    }
+    addCard(text) {
+        const realtimeCard = new RealTimeCard(text,this.color,this.textColor)
+        realtimeCard.create()
+        const gap = realtimeCard.getHeight()
+        this.cards.forEach((card,index)=>{
+          card.updateTopPosition(gap+window.innerHeight/10)
+        })
+        this.cards.push(realtimeCard)
     }
 }
