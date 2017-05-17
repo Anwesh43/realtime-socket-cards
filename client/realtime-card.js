@@ -84,7 +84,7 @@ class RealTimeCardFactory {
 }
 class RealTimeCardStore {
     static init(url,action,cardColor,cardTextColor) {
-        const realTimeCardFactory = new realTimeCardFactory(cardColor||"black",cardTextColor||"white")
+        const realTimeCardFactory = new RealTimeCardFactory(cardColor||"black",cardTextColor||"white")
         if(io) {
             const socket = io(url)
             socket.on(action,(data)=>{
